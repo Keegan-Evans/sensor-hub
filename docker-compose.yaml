@@ -112,7 +112,7 @@ services:
     hostname: "sensor_hub"
 
     # Need to figure out how to build for multiple architectures
-    image: "arm32v7/influxdb"
+    image: "influxdb:latest"
 
     ipc: "private"
 
