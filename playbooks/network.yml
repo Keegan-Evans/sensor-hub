@@ -30,6 +30,11 @@
         enabled: true
         masked: false
 
+    - name: copy hostapd config file
+      ansible.builtin.copy:
+        src: ../setup_files/hostapd.conf
+        dest: /etc/hostapd/hostapd.conf
+
     - name: start hostapd
       ansible.builtin.systemd:
         name: hostapd
@@ -76,3 +81,7 @@
       ansible.builtin.systemd:
         name: dnsmasq
         state: started
+
+    # ensure wifi on
+    - name: ensure wifi
+      ansible.builtin.rfkill
