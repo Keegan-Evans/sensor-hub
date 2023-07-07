@@ -1,0 +1,78 @@
+- name: configure network
+  hosts: all
+  tasks:
+    - name: update pi before starting
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+      ansible.builtin.apt:
+        upgrade: dist
+
+    - name: configure network addresses
+      ansible.builtin.copy:
+        src: ../setup_files/dhcpcd.conf
+        dest: /etc/dhcpcd.conf
+
+    - name: restart network
+      ansible.builtin.systemd:
+        name: dhcpcd
+        state: started
+
+    - name: install hostapd
+      ansible.builtin.apt:
+        name: hostapd
+        state: present
+
+    - name: enable and unmask hostapd
+      ansible.builtin.systemd:
+        name: hostapd
+        enabled: true
+        masked: false
+
+    - name: start hostapd
+      ansible.builtin.systemd:
+        name: hostapd
+        state: started
+
+# ALL OF THIS NEEDS WORK
+#    # enable ip forwarding, allowing connected devices to access internet
+#    - name: install iptables-peristent
+#      ansible.builtin.apt:
+#        name: iptables-persistent
+#        state: present
+#
+#    # add firewall rule
+#    - name: firewall node routing rule
+#      ansible.builtin.copy:
+#        src: ../setup_files/routed-ap.conf
+#        dest: /etc/sysctl.d/routed-ap.conf
+#
+#    # save firewall rule
+#     - name: save firewall rule
+#       ansible.builtin.iptables:
+#          rules:
+#            - -A FORWARD -i wlan0 -o eth0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+#            - -A FORWARD -i eth0 -o wlan0 -j ACCEPT
+#          table: filter
+#          chain: FORWARD
+#          jump: ACCEPT
+#          permanent: yes
+#
+#       ansible.builtin.netfilter-persistent.save
+
+    # defines the hosted network
+    - name: install dnsmasq
+      ansible.builtin.apt:
+        name: dnsmasq
+        state: present
+
+    - name: get dnsmasq config file
+      ansible.builtin.copy:
+        src: ../setup_files/dnsmasq.conf
+        dest: /etc/dnsmasq.conf
+
+    - name: restart dnsmasq
+      ansible.builtin.systemd:
+        name: dnsmasq
+        state: started

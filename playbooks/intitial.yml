@@ -1,0 +1,7 @@
+- name: "run update"
+  apt:
+    update_cache: true
+    cache_valid_time: 3600
+- name: Update Packages
+  apt:
+    upgrade: dist
