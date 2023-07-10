@@ -24,6 +24,11 @@
         name: hostapd
         state: present
 
+    # ensure wifi on
+    - name: ensure wifi
+      ansible.builtin.shell: |
+        sudo sudo rfkill unblock wlan
+
     - name: enable and unmask hostapd
       ansible.builtin.systemd:
         name: hostapd
@@ -81,7 +86,3 @@
       ansible.builtin.systemd:
         name: dnsmasq
         state: started
-
-    # ensure wifi on
-    - name: ensure wifi
-      ansible.builtin.rfkill
