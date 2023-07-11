@@ -1,0 +1,47 @@
+- name: setup mqtt and database
+  hosts: all
+  tasks:
+
+    - name: install python mqtt client
+      ansible.builtin.pip:
+        name: paho-mqtt
+
+    - name: copy files for mqtt_logger systemd service
+      ansible.builtin.copy:
+        src: ../setup_files/run_mqtt_logger.py
+        dest: /etc/run_mqtt_logger.py
+
+    - name: mqtt_logger systemd service
+      ansible.builtin.copy:
+        src: ../setup_files/mqtt_logger.service
+        dest: /etc/systemd/system/mqtt_logger.service
+
+    - name: copy mqtt logger script
+      ansible.builtin.copy:
+        src: ../setup_files/run_mqtt_logger.py
+        dest: /etc/run_mqtt_logger.py
+
+    - name: make sure db file exists
+      ansible.builtin.file:
+        path: /home/beta/sensor_data.db
+        state: touch
+
+    - name: copy db setup files
+      ansible.builtin.copy:
+        src: ../setup_files/setup_database.py
+        dest: /home/beta/setup_database.py
+
+    - name: install database
+      command: python /home/beta/setup_database.py
+
+    - name: start mqtt_logger
+      ansible.builtin.systemd:
+        name: mqtt_logger
+        enabled: true
+        masked: false
+        state: reloaded
+
+    #- name: reload systemd
+    #  ansible.builtin.systemd:
+    #    daemon_reload: true
+

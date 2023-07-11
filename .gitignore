@@ -3,3 +3,4 @@ pytest_cache
 *.db
 __pycache__
 bak/
+pis.ini
