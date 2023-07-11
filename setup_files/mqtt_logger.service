@@ -1,0 +1,11 @@
+[Unit]
+Description=log mqtt data to database
+After=multi-user.target
+
+[Service]
+Type=simple
+Restart=always
+ExecStart=/usr/bin/python3 /etc/run_mqtt_logger.py
+
+[Install]
+WantedBy=multi-user.target

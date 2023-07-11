@@ -20,8 +20,9 @@
     - name: ensure mosquitto running
       ansible.builtin.systemd:
         name: mosquitto
-        state: started
+        state: reloaded
         enabled: yes
 
-
-
+    - name: reload systemd
+      ansible.builtin.systemd:
+        daemon_reload: true
