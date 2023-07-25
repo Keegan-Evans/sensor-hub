@@ -21,15 +21,27 @@
       recurse: yes
       state: directory
       mode: 0755
-  
-  - name: copy requirements.txt
-    ansible.builtins.copy:
-    src: ../setup_files/server_
 
-  
   - name: create virtual environment for server
     ansible.builtin.command:
-      cmd: python -m venv ./viz/
+      cmd: "python -m venv /home/beta/viz/.venv"
+  
+  - name: copy requirements.txt
+    ansible.builtin.copy:
+      src: ../setup_files/viz_server/server_requirements.txt
+      dest: "/home/beta/viz/requirements.txt"
+  
+  - name: copy server setup
+    ansible.builtin.copy:
+      src: ../setup_files/viz_server/vizServer
+      dest: /home/beta/viz/
+
+  - name: install server
+    ansible.builtin.pip:
+      requirements: "/home/beta/viz/requirements.txt"
+      virtualenv: "/home/beta/viz/.venv"
+
+  
 
   # - name: activate server virtual environment
     # ansible.builtin.command:
@@ -38,11 +50,14 @@
 # Install Software
 
 # flask
-
+# 
   # TODO: template in home
-  - name: install flask + dependencies
-    ansible.builtin.pip:
-      name: Flask
-      virtualenv: ./viz/
+  # - name: install flask + dependencies
+    # ansible.builtin.pip:
+      # name: Flask
+      # virtualenv: ./viz/.venv
 
+  # - name: run flask server
+    # ansible.builtin.command:
+      # cmd: "flask --app vizServer run --debug"
       
