@@ -1,0 +1,48 @@
+# Create directory structure, install necessary software, and configures server
+# to produce and server visualizations of the data(and possibly to download
+# data?)
+
+- name: setup server
+  hosts: all
+  tasks:
+
+# TODO: ensure evaluated for security
+# TODO: template in username or home location
+
+# source /var/lib/awx/venv/ansible/bin/activate
+# umask 0022
+# pip install --upgrade pip
+# deactivate
+
+# Setup Location for Server
+  - name: create viz server environment
+    ansible.builtin.file:
+      path: "/home/beta/viz/"
+      recurse: yes
+      state: directory
+      mode: 0755
+  
+  - name: copy requirements.txt
+    ansible.builtins.copy:
+    src: ../setup_files/server_
+
+  
+  - name: create virtual environment for server
+    ansible.builtin.command:
+      cmd: python -m venv ./viz/
+
+  # - name: activate server virtual environment
+    # ansible.builtin.command:
+      # cmd: source ./viz/bin/activate
+
+# Install Software
+
+# flask
+
+  # TODO: template in home
+  - name: install flask + dependencies
+    ansible.builtin.pip:
+      name: Flask
+      virtualenv: ./viz/
+
+      
