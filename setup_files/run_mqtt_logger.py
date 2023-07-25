@@ -16,9 +16,9 @@ def log_aq_data(database_connection, database_cursor, data: json):
     tvoc = msg_data['data']['tvoc']
     h2 = msg_data['data']['h2']
     ethanol = msg_data['data']['ethanol']
-    for measurement, val in msg_data['data'].items():
-        var_name = str(measurement)
-        var_name = int(val)
+    #for measurement, val in msg_data['data'].items():
+    #    var_name = str(measurement)
+    #    var_name = int(val)
 
 
     database_cursor.execute("INSERT INTO air_quality VALUES "\
@@ -46,7 +46,7 @@ def on_message(client, userdata, msg):
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
-client.connect("192.168.10.1", 1883, 60)
+client.connect("localhost", 1883, 60)
 client.subscribe("sensor_data/#")
 
 # run client

@@ -1,0 +1,11 @@
+---
+- import_playbook: network.yml
+- import_playbook: mqtt_broker.yml
+- import_playbook: mqtt_client.yml
+- import_playbook: viz_server.yml
+- import_playbook: finish_up.yml
+#
+#- name: Finish up
+#  tasks:
+#    - name: Unconditionally reboot the machine with all defaults
+#      ansible.builtin.reboot:

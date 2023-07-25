@@ -5,7 +5,6 @@
       apt:
         name: mosquitto
         state: present
-        update_cache: yes
 
     # if config doesn't seem to be working, try placing
     # in /etc/mosquitto/mosquitto.conf instead
@@ -22,6 +21,10 @@
         name: mosquitto
         state: reloaded
         enabled: yes
+
+    - name: install sqlite3
+      ansible.builtin.apt:
+        name: sqlite3
 
     - name: reload systemd
       ansible.builtin.systemd:

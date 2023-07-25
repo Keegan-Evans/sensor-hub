@@ -39,9 +39,5 @@
         name: mqtt_logger
         enabled: true
         masked: false
-        state: reloaded
-
-    #- name: reload systemd
-    #  ansible.builtin.systemd:
-    #    daemon_reload: true
+        state: restarted
 

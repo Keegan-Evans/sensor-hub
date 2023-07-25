@@ -1,5 +1,6 @@
 - name: configure network
   hosts: all
+  remote_user: beta
   tasks:
     - name: update pi before starting
       ansible.builtin.apt:

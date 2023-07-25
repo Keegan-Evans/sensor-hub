@@ -1,3 +1,6 @@
+[all]
+sensor_hub_testbed
+
 [all:vars]
 ansible_user=beta
 ansible_become=yes
