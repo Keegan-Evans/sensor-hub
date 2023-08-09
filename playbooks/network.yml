@@ -1,94 +1,92 @@
-- name: configure network
+- name: access point and network setup
   hosts: all
-  remote_user: beta
   tasks:
-    - name: update pi before starting
-      ansible.builtin.apt:
-        update_cache: yes
-        cache_valid_time: 3600
 
-      ansible.builtin.apt:
-        upgrade: dist
+  # install hostapd
+  - name: install hostapd
+    apt:
+      name: hostapd
+      state: present
 
-    - name: configure network addresses
-      ansible.builtin.copy:
-        src: ../setup_files/dhcpcd.conf
-        dest: /etc/dhcpcd.conf
+  # unmask hostapd
+  - name: unmask hostapd
+    shell: systemctl unmask hostapd
 
-    - name: restart dhcpcd
-      ansible.builtin.systemd:
-        name: dhcpcd
-        state: restarted
+  # enable hostapd
+  - name: enable hostapd
+    shell: systemctl enable hostapd
 
-    - name: install hostapd
-      ansible.builtin.apt:
-        name: hostapd
-        state: present
+  # install dnsmasq
+  - name: install dnsmasq
+    apt:
+      name: dnsmasq
+      state: present
 
-    # must be before ensure wifi
-    - name: copy hostapd config file
-      ansible.builtin.copy:
-        src: ../setup_files/hostapd.conf
-        dest: /etc/hostapd/hostapd.conf
+  # install iptables-persistent
+  - name: install iptables-persistent
+    apt:
+      name: iptables-persistent
+      state: present
 
-    # ensure wifi on
-    - name: ensure wifi
-      ansible.builtin.shell: |
-        sudo rfkill unblock wlan
+  # install netfilter-persistent
+  - name: install netfilter-persistent
+    apt:
+      name: netfilter-persistent
+      state: present
 
-    - name: enable and unmask hostapd
-      ansible.builtin.systemd:
-        name: hostapd
-        enabled: true
-        masked: false
+  ### setup the network router
 
-    - name: start hostapd
-      ansible.builtin.systemd:
-        name: hostapd
-        state: restarted
+  # remove old dhcpcd.conf
+  - name: remove old dhcpcd.conf
+    file:
+      path: /etc/dhcpcd.conf
+      state: absent
 
-# ALL OF THIS NEEDS WORK
-#    # enable ip forwarding, allowing connected devices to access internet
-#    - name: install iptables-peristent
-#      ansible.builtin.apt:
-#        name: iptables-persistent
-#        state: present
-#
-#    # add firewall rule
-#    - name: firewall node routing rule
-#      ansible.builtin.copy:
-#        src: ../setup_files/routed-ap.conf
-#        dest: /etc/sysctl.d/routed-ap.conf
-#
-#    # save firewall rule
-#     - name: save firewall rule
-#       ansible.builtin.iptables:
-#          rules:
-#            - -A FORWARD -i wlan0 -o eth0 -m state --state RELATED,ESTABLISHED -j ACCEPT
-#            - -A FORWARD -i eth0 -o wlan0 -j ACCEPT
-#          table: filter
-#          chain: FORWARD
-#          jump: ACCEPT
-#          permanent: yes
-#
-#       ansible.builtin.netfilter-persistent.save
+  # copy new dhcpcd.conf
+  - name: copy new dhcpcd.conf
+    copy:
+      src: ../setup_files/dhcpcd.conf
+      dest: /etc/dhcpcd.conf
+      owner: root
+      group: root
+      mode: 0644
 
-    # defines the hosted network
-    - name: install dnsmasq
-      ansible.builtin.apt:
-        name: dnsmasq
-        state: present
+  # remove old dnsmasq.conf
+  - name: remove old dnsmasq.conf
+    file:
+      path: /etc/dnsmasq.conf
+      state: absent
+  
+  # copy new dnsmasq.conf
+  - name: copy new dnsmasq.conf
+    copy:
+      src: ../setup_files/dnsmasq.conf
+      dest: /etc/dnsmasq.conf
+      owner: root
+      group: root
+      mode: 0644
 
-    - name: get dnsmasq config file
-      ansible.builtin.copy:
-        src: ../setup_files/dnsmasq.conf
-        dest: /etc/dnsmasq.conf
+  # ensure dnsmasq service is running
+  - name: ensure dnsmasq service is running
+    service:
+      name: dnsmasq
+      state: restarted
+      enabled: yes
+      masked: no
 
-    - name: restart dnsmasq
-      ansible.builtin.systemd:
-        name: dnsmasq
-        state: restarted
+  # ensure wifi is not blocked
+  - name: ensure wifi is not blocked
+    shell: rfkill unblock wlan 
 
-    - name: reload systemd
-      ansible.builtin.systemd:
-        daemon_reload: true
+  # upload hostapd.conf
+  - name: upload hostapd.conf
+    copy:
+      src: ../setup_files/hostapd.conf
+      dest: /etc/hostapd/hostapd.conf
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: Reboot machine using a custom reboot command
+    ansible.builtin.reboot:
+      reboot_command: systemctl reboot

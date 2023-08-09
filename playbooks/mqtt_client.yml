@@ -10,16 +10,13 @@
       ansible.builtin.copy:
         src: ../setup_files/run_mqtt_logger.py
         dest: /etc/run_mqtt_logger.py
+        force: yes
 
-    - name: mqtt_logger systemd service
+    - name: copy mqtt_logger systemd service
       ansible.builtin.copy:
         src: ../setup_files/mqtt_logger.service
         dest: /etc/systemd/system/mqtt_logger.service
-
-    - name: copy mqtt logger script
-      ansible.builtin.copy:
-        src: ../setup_files/run_mqtt_logger.py
-        dest: /etc/run_mqtt_logger.py
+        force: yes
 
     - name: make sure db file exists
       ansible.builtin.file:

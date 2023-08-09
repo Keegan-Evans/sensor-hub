@@ -1,0 +1,66 @@
+- name: setup micropython library and build tools
+  hosts: all
+  tasks:
+
+  - name: create workspace
+    ansible.builtin.file:
+      path: /home/beta/pico
+      recurse: yes
+      state: directory
+      mode: 0755
+  
+  # - name: install rust
+    # shell: "sudo curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y"
+  # 
+  # - name: add rust to path
+    # ansible.builtin.lineinfile:
+      # path: /home/beta/.bashrc
+      # line: "export PATH=$PATH:/home/beta/.cargo/bin"
+      # state: present
+      # create: yes
+# 
+  # - name: reboot
+    # ansible.builtin.reboot:
+      # reboot_timeout: 300
+      # connect_timeout: 300
+      # msg: "rebooting to update path"
+      # pre_reboot_delay: 0
+      # post_reboot_delay: 0
+  # 
+  # - name: update rust to latest
+    # shell: "rustup update"
+
+
+  - name: install virtualenv
+    ansible.builtin.apt:
+      pkg:
+        - python3-pip
+        - python3-venv
+      update_cache: yes
+      state: present
+  
+  - name: create firmware utility virtual environment
+    pip:
+      name: ansible
+      virtualenv: /home/beta/pico/firmware_env
+      virtualenv_command: 'python3 -m venv'
+
+
+  - name: clone micropython
+    git: 
+      dest: /home/beta/pico/micropython
+      repo: git@github.com:micropython/micropython.git
+      force: yes
+
+  - name: install board specific tools
+    ansible.builtin.apt:
+      pkg:
+        - cmake
+        - gcc-arm-none-eabi
+        - libnewlib-arm-none-eabi
+        - build-essential
+      state: present
+
+  - name: make mpy-cross
+    ansible.builtin.command:
+      cmd: "make -C /home/beta/micropython/mpy-cross/"
