@@ -1,5 +1,10 @@
 import paho.mqtt.client as mqtt
 import sqlite3
+import json
+import sys
+import os
+
+# TODO: implement try/except for all db operations so that good error messages are emitted
 
 db_fp = os.path.join("/", "home", "beta", "sensor_data.db")
 
@@ -23,6 +28,7 @@ db_fp = os.path.join("/", "home", "beta", "sensor_data.db")
 
 # Topic specific callback functions
 
+# air_quality
 def log_air_quality(client, userdata, message):
     parsed_packet = json.loads(message.payload.decode('utf-8'))
     aq_packet = {}
@@ -38,6 +44,7 @@ def log_air_quality(client, userdata, message):
     sys.stdout.write("aq packet written to db\n")
     sys.stdout.flush()
 
+# weather_station
 def log_weather_station(client, userdata, message):
     parsed_packet = json.loads(message.payload.decode('utf-8'))
     ws_packet = {}
@@ -54,6 +61,7 @@ def log_weather_station(client, userdata, message):
     sys.stdout.write("ws packet written to db\n")
     sys.stdout.flush()
 
+# soil_moisture
 def log_soil_moisture(client, userdata, message):
     parsed_packet = json.loads(message.payload.decode('utf-8'))
     sm_packet = {}
@@ -78,6 +86,9 @@ def on_connect(client, userdata, flags, rc):
 # the on_message callback function handles general sensor data packets, specific topic are handled by their own message_callback_add functions
 def on_message(client, userdata, msg):
     print(f"Topic: {msg.topic} Message: {str(msg.payload.decode())}")
+
+conn = sqlite3.connect(db_fp)
+cursor = conn.cursor()
 
 client = mqtt.Client()
 client.on_connect = on_connect

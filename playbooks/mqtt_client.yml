@@ -11,17 +11,19 @@
       ansible.builtin.pip:
        name: paho-mqtt
 
-    - name: copy files for mqtt_logger systemd service
+    - name: copy python script for mqtt_logger_service
       ansible.builtin.copy:
         src: ../setup_files/run_mqtt_logger.py
         dest: /etc/run_mqtt_logger.py
         force: yes
+        mode: 0755
 
-    - name: copy mqtt_logger systemd service
+    - name: copy mqtt_logger systemd service setup file
       ansible.builtin.copy:
         src: ../setup_files/mqtt_logger.service
-        dest: /etc/systemd/system/mqtt_logger.service
+        dest: /lib/systemd/system/mqtt_logger.service
         force: yes
+        mode: 0644
 
     # read AND write permissions for all users needed
     - name: make sure db file exists
@@ -45,4 +47,3 @@
         enabled: true
         masked: false
         state: restarted
-
