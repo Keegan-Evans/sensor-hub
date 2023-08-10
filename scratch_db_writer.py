@@ -36,13 +36,13 @@ def parse_air_quality(client, userdata, message):
         aq_packet[k] = v
     aq_packet['sensor_id'] = parsed_packet['sensor']
         
-    # sys.stdout.write(str(aq_packet))
-    # sys.stdout.flush()
 
 # 
 # 
     cursor.execute("INSERT INTO air_quality (id, co2, tvoc, h2, ethanol, sensor_id, timestamp) VALUES (NULL, :co2, :tvoc, :h2, :ethanol, :sensor_id, :timestamp)", aq_packet)
     conn.commit()
+    sys.stdout.write("aq packet written to db\n")
+    sys.stdout.flush()
         
 # function to parse message and print to console
 def parse_message(message):

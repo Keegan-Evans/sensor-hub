@@ -8,7 +8,7 @@
         state: present
 
     - name: install python mqtt client and sqlite3
-     ansible.builtin.pip:
+      ansible.builtin.pip:
        name: paho-mqtt
 
     - name: copy files for mqtt_logger systemd service
@@ -23,10 +23,13 @@
         dest: /etc/systemd/system/mqtt_logger.service
         force: yes
 
+    # read AND write permissions for all users needed
     - name: make sure db file exists
       ansible.builtin.file:
         path: /home/beta/sensor_data.db
         state: touch
+        mode: 0666
+        owner: root
 
     - name: copy db setup files
       ansible.builtin.copy:

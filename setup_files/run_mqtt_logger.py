@@ -26,7 +26,7 @@ def write_to_db(topic, message):
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code " + str(rc))
     client.subscribe("#")  # Subscribe to all topics
-
+# the on_message callback function handles general sensor data packets, specific topic are handled by their own add_ functions
 def on_message(client, userdata, msg):
     print(f"Topic: {msg.topic} Message: {str(msg.payload.decode())}")
     write_to_db(msg.topic, str(msg.payload.decode()))
