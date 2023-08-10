@@ -48,7 +48,7 @@ def log_weather_station(client, userdata, message):
 
     ws_packet['sensor_id'] = parsed_packet['sensor']
 
-    cursor.execute("INSERT INTO weather_station (id, temperature, humidity, pressure, sensor_id, timestamp) VALUES (NULL, :temperature, :humidity, :pressure, :sensor_id, :timestamp)", ws_packet)
+    cursor.execute("INSERT INTO weather_station (id, wind_direction, wind_speed, rainfall, sensor_id, timestamp) VALUES (NULL, :wind_direction, :wind_speed, :rainfall, :sensor_id, :timestamp)", ws_packet)
     conn.commit()
 
     sys.stdout.write("ws packet written to db\n")
