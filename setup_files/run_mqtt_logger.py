@@ -98,5 +98,10 @@ client.message_callback_add("sensor_data/weather_station", log_weather_station)
 client.message_callback_add("sensor_data/soil_moisture", log_soil_moisture)
 
 # Connect to MQTT broker
-client.connect("10.42.0.1", 1883, 60)
+try:
+    client.connect("10.42.0.1", 1883, 60)
+except ConnectionRefusedError:
+    print("MQTT broker not running")
+    sys.exit(1)
+
 client.loop_forever()

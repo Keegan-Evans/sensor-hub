@@ -65,6 +65,12 @@
       owner: root
       group: root
       mode: 0644
+  
+  # set permissions for dnsmasq.leases
+  - name: set permissions for dnsmasq.leases
+    file:
+      path: /var/lib/misc/dnsmasq.leases
+      mode: 0666
 
   # ensure dnsmasq service is running
   - name: ensure dnsmasq service is running

@@ -4,3 +4,4 @@ pytest_cache
 __pycache__
 bak/
 pis.ini
+.vscode/
