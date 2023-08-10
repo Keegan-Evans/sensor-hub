@@ -2,9 +2,14 @@
   hosts: all
   tasks:
 
-    - name: install python mqtt client
-      ansible.builtin.pip:
-        name: paho-mqtt
+    - name: install sqlite3
+      ansible.builtin.package:
+        name: sqlite3
+        state: present
+
+    - name: install python mqtt client and sqlite3
+     ansible.builtin.pip:
+       name: paho-mqtt
 
     - name: copy files for mqtt_logger systemd service
       ansible.builtin.copy:

@@ -5,7 +5,7 @@ import sqlite3
 import paho.mqtt.client as mqtt
 
 # TODO refactor to single location
-db_fp = os.path.join("/home", "beta", "sensor_data.db")
+db_fp = os.path.join("/", "home", "beta", "sensor_data.db")
 
 # log-parser function
 def log_aq_data(database_connection, database_cursor, data: json):
