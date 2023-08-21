@@ -12,6 +12,7 @@
        name: paho-mqtt
 
     - name: copy python script for mqtt_logger_service
+      tags: logger
       ansible.builtin.copy:
         src: ../setup_files/run_mqtt_logger.py
         dest: /etc/run_mqtt_logger.py

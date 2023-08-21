@@ -63,6 +63,8 @@ def log_weather_station(client, userdata, message):
 
 # soil_moisture
 def log_soil_moisture(client, userdata, message):
+    sys.stdout.write("processing sm packet\n")
+    sys.stdout.flush()
     parsed_packet = json.loads(message.payload.decode('utf-8'))
     sm_packet = {}
     sm_packet['timestamp'] = message.timestamp
@@ -71,6 +73,8 @@ def log_soil_moisture(client, userdata, message):
         sm_packet[k] = v
 
     sm_packet['sensor_id'] = parsed_packet['sensor']
+    sys.stdout.write("Packet:{}\n".format(sm_packet))
+    sys.stdout.flush()
 
     cursor.execute("INSERT INTO soil_moisture (id, moisture, sensor_id, timestamp) VALUES (NULL, :moisture, :sensor_id, :timestamp)", sm_packet)
     conn.commit()
