@@ -56,7 +56,15 @@
     file:
       path: /etc/dnsmasq.conf
       state: absent
+
   
+  # ensure dnsmasq.leases exists
+  - name: ensure dnsmasq.lease
+    file:
+      path: /var/lib/misc/dnsmasq.leases
+      state: touch
+      mode: 0666
+
   # copy new dnsmasq.conf
   - name: copy new dnsmasq.conf
     copy:
@@ -65,13 +73,14 @@
       owner: root
       group: root
       mode: 0644
+
   
   # set permissions for dnsmasq.leases
-  - name: set permissions for dnsmasq.leases
-    file:
-      path: /var/lib/misc/dnsmasq.leases
-      mode: 0666
-
+  # - name: set permissions for dnsmasq.leases
+    # file:
+      # path: /var/lib/misc/dnsmasq.leases
+      # mode: 0666
+# 
   # ensure dnsmasq service is running
   - name: ensure dnsmasq service is running
     service:
@@ -92,6 +101,13 @@
       owner: root
       group: root
       mode: 0644
+
+  - name: ensure hostapd service is running
+    service:
+      name: hostapd
+      state: restarted
+      enabled: yes
+      masked: no  
 
   - name: Reboot machine using a custom reboot command
     ansible.builtin.reboot:
