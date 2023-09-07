@@ -1,0 +1,10 @@
+name: sensor-hub-test
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python
+  - sqlite3
+  - sqlalchemy
+  - pandas
+  - flask
