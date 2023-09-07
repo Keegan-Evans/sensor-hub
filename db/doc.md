@@ -8,6 +8,10 @@
     - [ ] update message generation functionality in sensor-hub drivers
     - [ ] REST api to access db
     - [ ] Visualiztion server to serve dashboard
+    - [ ] Determine best way to parse mqtt messages into database.
+        - 1 mqtt client just hands complete message packet in and parsing is handled on database model side of things
+        - 2 mqtt client parses message packet and runs seperate db update for each message segment.
+
 
 example models code:
 ```python
