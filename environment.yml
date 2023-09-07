@@ -4,7 +4,7 @@ channels:
   - defaults
 dependencies:
   - python
-  - sqlite3
+  - sqlite
   - sqlalchemy
   - pandas
   - flask
