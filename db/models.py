@@ -9,7 +9,7 @@ from sqlalchemy import (
     DateTime,
 )
 
-# from sqlalchemy.orm import relationship, backref
+from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -45,15 +45,16 @@ class SensorMeasurement(Base):
     __tablename__ = "sensor_measurements"
     sensor_measurement_num_id = Column(Integer, primary_key=True)
 
-    topic = Column(String, ForeignKey("topics.topic_num_id"))
+    topic = relationship("Topic", backref=backref("sensor_measurements"))
 
-    sensor = Column(String, ForeignKey("sensors.sensor_num_id"))
+    sensor = relationship("Sensor", backref=backref("sensor_measurements"))
 
     time = Column(DateTime(timezone=True), server_default=func.now())
 
-    measurement_label = Column(
-        String, ForeignKey("measurements.measurement_num_id")
+    measurement_label = relationship(
+        "Measurement", backref=backref("sensor_measurements")
     )
+
     measurement_value = Column(Float)
 
 

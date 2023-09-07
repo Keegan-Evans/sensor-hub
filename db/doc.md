@@ -1,9 +1,15 @@
 # tables
-    - measurement_recordings (sensor, topic, timestamp, measurement_label, measurement_value)
-    - sensors
-    - topics
-    - measurment_labels
+    - [x]  measurement_recordings (sensor, topic, timestamp, measurement_label, measurement_value)
+    - [x]  sensors
+    - [x]  topics
+    - [x]  measurment_labels
+# other things to do:
+    - [ ] update access client(mqtt)
+    - [ ] update message generation functionality in sensor-hub drivers
+    - [ ] REST api to access db
+    - [ ] Visualiztion server to serve dashboard
 
+example models code:
 ```python
 from sqlalchemy import Column, Integer, String, ForeignKey, Table
 from sqlalchemy.orm import relationship, backref
