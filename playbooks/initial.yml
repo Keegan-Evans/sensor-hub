@@ -1,0 +1,11 @@
+- name: initial updates
+  hosts: all
+  tasks:
+    - name: update pi before starting
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: perform upgrades
+      ansible.builtin.apt:
+        upgrade: dist

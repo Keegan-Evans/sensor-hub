@@ -1,0 +1,32 @@
+- name: setup mqtt broker
+  hosts: all
+  tasks:
+    - name: install mosquitto
+      apt:
+        name: mosquitto
+        state: present
+
+    # if config doesn't seem to be working, try placing
+    # in /etc/mosquitto/mosquitto.conf instead
+    - name: configure mosquitto
+      ansible.builtin.copy:
+        src: ../setup_files/mosquitto.conf
+        dest: /etc/mosquitto/conf.d
+        owner: beta
+        group: beta
+        mode: 0644
+
+    - name: ensure mosquitto running
+      ansible.builtin.systemd:
+        name: mosquitto
+        state: restarted
+        enabled: yes
+
+    - name: install sqlite3
+      ansible.builtin.apt:
+        name: sqlite3
+        state: present
+
+    - name: reload systemd
+      ansible.builtin.systemd:
+        daemon_reload: true
