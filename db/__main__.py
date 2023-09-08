@@ -23,6 +23,9 @@ def main():
     session.commit()
 
     add_measurement_record(session=session)
+    add_measurement_record(
+        session=session, measurement_kind="humidity", measurement_value=99.0
+    )
 
 
 if __name__ == "__main__":

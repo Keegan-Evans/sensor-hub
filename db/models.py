@@ -62,6 +62,16 @@ class Topic(Base):
     topic_num_id = Column(Integer, primary_key=True)
     topic = Column(String, unique=True)
 
+    def add(self, session, topic_to_add):
+        """Add a new topic to the database."""
+        topic = (
+            session.query(Topic).filter_by(topic=topic_to_add).one_or_none()
+        )
+        if topic is None:
+            return
+        session.add(Topic(topic=topic_to_add))
+        session.commit()
+
 
 class Sensor(Base):
     """Create sensors table data model."""
@@ -70,13 +80,35 @@ class Sensor(Base):
     sensor_num_id = Column(Integer, primary_key=True)
     sensor_id = Column(String, unique=True)
 
+    def add(self, session, sensor_to_add):
+        """Add a new sensor to the database."""
+        sensor = (
+            session.query(Sensor).filter_by(sensor=sensor_to_add).one_or_none()
+        )
+        if sensor is None:
+            return
+        session.add(Sensor(sensor=sensor_to_add))
+        session.commit()
+
 
 class MeasurementKind(Base):
     """ "Create measurements table data model."""
 
     __tablename__ = "measurements"
     measurement_num_id = Column(Integer, primary_key=True)
-    measurement_label = Column(String, unique=True)
+    measurement_kind = Column(String, unique=True)
+
+    def add(self, session, measurement_to_add):
+        """Add a new measurement kind to the database."""
+        measurement_kind = (
+            session.query(MeasurementKind)
+            .filter_by(measurement_kind=measurement_to_add)
+            .one_or_none()
+        )
+        if measurement_kind is None:
+            return
+        session.add(MeasurementKind(measurement_kind=measurement_to_add))
+        session.commit()
 
 
 class SensorMeasurement(Base):
@@ -109,10 +141,16 @@ class SensorMeasurement(Base):
 
     def __repr__(self):
         return (
-            f"topic: '{self.topic[0].topic}', sensor: '{self.sensor}', "
-            "time: '{self.time}',"
-            "measurement_kind: '{self.measurement_kind}', "
-            "measurement_value: '{self.measurement_value}'"
+            "topic: {}, sensor: {}, "
+            "time: {}, "
+            "measurement_kind: {}, "
+            "measurement_value: {}".format(
+                self.topic[0].topic,
+                self.sensor[0].sensor_id,
+                self.time.strftime("%Y-%m-%d %H:%M:%S"),
+                self.measurement_kind[0].measurement_kind,
+                self.measurement_value,
+            )
         )
 
 
@@ -120,17 +158,36 @@ def add_measurement_record(
     session,
     topic="sensor_data",
     sensor="env",
-    measurement_label="temp",
+    measurement_kind="temp",
     measurement_value=25.0,
 ):
     """Add a new measurement record to the database."""
     # create instance of SensorMeasurement
+    target_topic = session.query(Topic).filter_by(topic=topic).one_or_none()
+    if target_topic is None:
+        target_topic = Topic(topic=topic)
+        session.add(target_topic)
+
+    sensor_id = session.query(Sensor).filter_by(sensor_id=sensor).one_or_none()
+    if sensor_id is None:
+        sensor_id = Sensor(sensor_id=sensor)
+        session.add(sensor_id)
+
+    target_measurement_kind = (
+        session.query(MeasurementKind)
+        .filter_by(measurement_kind=measurement_kind)
+        .one_or_none()
+    )
+    if target_measurement_kind is None:
+        target_measurement_kind = MeasurementKind(
+            measurement_kind=measurement_kind
+        )
+        session.add(target_measurement_kind)
+
     measurement_record = SensorMeasurement(
-        topic=[Topic(topic=topic)],
-        sensor=[Sensor(sensor_id=sensor)],
-        measurement_kind=[
-            MeasurementKind(measurement_label=measurement_label)
-        ],
+        topic=[target_topic],
+        sensor=[sensor_id],
+        measurement_kind=[target_measurement_kind],
         measurement_value=measurement_value,
     )
     session.add(measurement_record)
