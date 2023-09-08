@@ -85,14 +85,12 @@ class SensorMeasurement(Base):
     __tablename__ = "sensor_measurements"
     sensor_measurement_num_id = Column(Integer, primary_key=True)
 
-    # topic_foreign_key = Column(Integer, ForeignKey("topics.topic_num_id"))
     topic = relationship(
         "Topic",
         secondary=topic_sensor_measurement,
         backref=backref("sensor_measurements"),
     )
 
-    # sensor_foreign_key = Column(Integer, ForeignKey("sensors.sensor_num_id"))
     sensor = relationship(
         "Sensor",
         secondary=sensor_sensor_measurement,
@@ -101,9 +99,6 @@ class SensorMeasurement(Base):
 
     time = Column(DateTime(timezone=True), server_default=func.now())
 
-    # measurment_foreign_key = Column(
-    # Integer, ForeignKey("measurements.measurement_num_id")
-    # )
     measurement_kind = relationship(
         "MeasurementKind",
         secondary=measurement_kind_sensor_measurement,
@@ -121,32 +116,6 @@ class SensorMeasurement(Base):
         )
 
 
-# Relationship Tables
-
-
-# topic_sensor = Table(
-#    "topic_sensor",
-#    Base.metadata,
-#    Column("topic_num_id", Integer, ForeignKey("topics.topic_num_id")),
-#    Column("sensor_num_id", Integer, ForeignKey("sensors.sensor_num_id")),
-# )
-#
-# measurement_sensor = Table(
-#    "measurement_sensor",
-#    Base.metadata,
-#    Column(
-#        "measurement_num_id",
-#        Integer,
-#        ForeignKey("measurements.measurement_num_id"),
-#    ),
-#    Column(
-#        "sensor_num_id",
-#        Integer,
-#        ForeignKey("sensors.sensor_num_id"),
-#    ),
-# )
-
-# create method to write measurements to database
 def add_measurement_record(
     session,
     topic="sensor_data",

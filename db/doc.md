@@ -12,5 +12,6 @@
         - 1 mqtt client just hands complete message packet in and parsing is handled on database model side of things
         - 2 mqtt client parses message packet and runs seperate db update for each message segment.
 
-    - [ ] related to above, create read-logger function
-    - [ ] main function to actually run the thing
+    - [x] related to above, create read-logger function
+    - [x] main function to actually run the thing
+    - [ ] implement update functions to add new entries to Topic, Sensor, and MeasurementKind tables.
