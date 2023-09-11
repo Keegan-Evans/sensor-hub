@@ -10,9 +10,10 @@ from sqlalchemy import (
     create_engine,
 )
 
-from importlib import resources
 from sqlalchemy.orm import relationship, backref, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+
+import os
 
 
 Base = declarative_base()
@@ -148,3 +149,16 @@ class SensorMeasurement(Base):
                 self.value,
             )
         )
+
+
+if __name__ == "__main__":
+    with os.path.join(
+        "/", "home", "beta", "sensor_data.db"
+    ) as sqlite_filepath:
+        engine = create_engine(f"sqlite:///{sqlite_filepath}")
+
+    Base.metadata.create_all(engine)
+
+    Session = sessionmaker(engine)
+    session = Session()
+    session.commit()

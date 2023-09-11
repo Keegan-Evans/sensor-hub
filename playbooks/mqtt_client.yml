@@ -7,7 +7,7 @@
         name: sqlite3
         state: present
 
-    - name: install python mqtt client and sqlite3
+    - name: install python mqtt client
       ansible.builtin.pip:
        name: paho-mqtt
 

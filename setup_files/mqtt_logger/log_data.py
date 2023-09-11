@@ -1,5 +1,10 @@
 from sqlalchemy.sql import func
-from db.sensor_data_models import Topic, Sensor, Measurement, SensorMeasurement
+from mqtt_logger.sensor_data_models import (
+    Topic,
+    Sensor,
+    Measurement,
+    SensorMeasurement,
+)
 
 ###############################################################################
 # helper functions
@@ -7,7 +12,7 @@ from db.sensor_data_models import Topic, Sensor, Measurement, SensorMeasurement
 
 
 # DONE: add multiple sensor measurements at once
-def add_sensor_reading_record(
+def add_sensors_reading_record(
     session,
     topic: str = "sensor_data",
     sensor: str = "env",
