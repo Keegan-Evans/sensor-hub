@@ -183,6 +183,8 @@ def add_measurement_record(
             measurement_kind=measurement_kind
         )
         session.add(target_measurement_kind)
+        print(measurement_kind)
+        raise
 
     measurement_record = SensorMeasurement(
         topic=[target_topic],
@@ -193,7 +195,11 @@ def add_measurement_record(
     session.add(measurement_record)
     session.commit()
     for entry in session.query(SensorMeasurement):
-        print(entry)
+        try:
+            print(entry)
+        except Exception:
+            # TODO: add logging
+            continue
 
 
 with resources.path("db.data", "sensor_data.db") as sqlite_filepath:
