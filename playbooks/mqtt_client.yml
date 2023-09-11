@@ -14,8 +14,8 @@
     - name: copy python script for mqtt_logger_service
       tags: logger
       ansible.builtin.copy:
-        src: ../setup_files/run_mqtt_logger.py
-        dest: /etc/run_mqtt_logger.py
+        src: ../setup_files/mqtt_logger/
+        dest: /etc/mqtt_logger/
         force: yes
         mode: 0755
 
@@ -34,13 +34,8 @@
         mode: 0666
         owner: root
 
-    - name: copy db setup files
-      ansible.builtin.copy:
-        src: ../setup_files/setup_database.py
-        dest: /home/beta/setup_database.py
-
     - name: install database
-      command: python /home/beta/setup_database.py
+      command: python /etc/mqtt_logger/models.py
 
     - name: start mqtt_logger
       ansible.builtin.systemd:

@@ -153,7 +153,7 @@ class SensorMeasurement(Base):
 
 if __name__ == "__main__":
     with os.path.join(
-        "/", "home", "beta", "sensor_data.db"
+        "/", "home", "beta", "sensor_data.dbrun_"
     ) as sqlite_filepath:
         engine = create_engine(f"sqlite:///{sqlite_filepath}")
 
