@@ -15,6 +15,8 @@
     - [x] related to above, create read-logger function
     - [x] main function to actually run the thing
     - [x] implement update functions to add new entries to Topic, Sensor, and MeasurementKind tables.
-    - [ ] change automation on sensor hub setup files to implement this database.
-    - [ ] modify add_measurment_record to add_measurement_records, which will all writing an arbitrary number of measurements from the same mqtt packet
-    - [ ] wire mqtt logger client to use "add_measurement_records"
+    - [x] change automation on sensor hub setup files to implement this database.
+    - [ ] update mqtt_logger.service to use new `mqtt_logger` library
+    - [x] modify add_measurment_record to add_measurement_records, which will all writing an arbitrary number of measurements from the same mqtt packet
+    - [x] wire mqtt logger client to use "add_measurement_records"
+    - [ ] Modify mqtt_client playbook to copy over new `mqtt_logger` library
