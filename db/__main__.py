@@ -1,9 +1,5 @@
-from db.sensor_data_models import (
-    add_measurement_record,
-)
-
+from db.log_data import add_sensor_reading_record
 from importlib import resources
-
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
@@ -22,10 +18,10 @@ def main():
     session = Session()
     session.commit()
 
-    add_measurement_record(session=session)
-    add_measurement_record(
-        session=session, measurement_kind="humidity", measurement_value=99.0
+    add_sensor_reading_record(
+        session=session, measurements={"temp": 19.6, "humidity": 78.3}
     )
+    add_sensor_reading_record(session=session)
 
 
 if __name__ == "__main__":

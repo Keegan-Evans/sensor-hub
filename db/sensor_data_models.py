@@ -17,6 +17,11 @@ from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
+
+###############################################################################
+# connection tables
+###############################################################################
+
 topic_sensor_measurement = Table(
     "topic_sensor_measurement",
     Base.metadata,
@@ -55,6 +60,9 @@ measurement_kind_sensor_measurement = Table(
 )
 
 
+###############################################################################
+# ORM data models
+###############################################################################
 class Topic(Base):
     """Create a topic table data model."""
 
@@ -91,24 +99,12 @@ class Sensor(Base):
         session.commit()
 
 
-class MeasurementKind(Base):
+class Measurement(Base):
     """ "Create measurements table data model."""
 
     __tablename__ = "measurements"
     measurement_num_id = Column(Integer, primary_key=True)
-    measurement_kind = Column(String, unique=True)
-
-    def add(self, session, measurement_to_add):
-        """Add a new measurement kind to the database."""
-        measurement_kind = (
-            session.query(MeasurementKind)
-            .filter_by(measurement_kind=measurement_to_add)
-            .one_or_none()
-        )
-        if measurement_kind is None:
-            return
-        session.add(MeasurementKind(measurement_kind=measurement_to_add))
-        session.commit()
+    measurement = Column(String, unique=True)
 
 
 class SensorMeasurement(Base):
@@ -131,13 +127,13 @@ class SensorMeasurement(Base):
 
     time = Column(DateTime(timezone=True), server_default=func.now())
 
-    measurement_kind = relationship(
-        "MeasurementKind",
+    measurement = relationship(
+        "Measurement",
         secondary=measurement_kind_sensor_measurement,
         backref=backref("sensor_measurements"),
     )
 
-    measurement_value = Column(Float)
+    value = Column(Float)
 
     def __repr__(self):
         return (
@@ -148,64 +144,7 @@ class SensorMeasurement(Base):
                 self.topic[0].topic,
                 self.sensor[0].sensor_id,
                 self.time.strftime("%Y-%m-%d %H:%M:%S"),
-                self.measurement_kind[0].measurement_kind,
-                self.measurement_value,
+                self.measurement[0].measurement,
+                self.value,
             )
         )
-
-
-def add_measurement_record(
-    session,
-    topic="sensor_data",
-    sensor="env",
-    measurement_kind="temp",
-    measurement_value=25.0,
-):
-    """Add a new measurement record to the database."""
-    # create instance of SensorMeasurement
-    target_topic = session.query(Topic).filter_by(topic=topic).one_or_none()
-    if target_topic is None:
-        target_topic = Topic(topic=topic)
-        session.add(target_topic)
-
-    sensor_id = session.query(Sensor).filter_by(sensor_id=sensor).one_or_none()
-    if sensor_id is None:
-        sensor_id = Sensor(sensor_id=sensor)
-        session.add(sensor_id)
-
-    target_measurement_kind = (
-        session.query(MeasurementKind)
-        .filter_by(measurement_kind=measurement_kind)
-        .one_or_none()
-    )
-    if target_measurement_kind is None:
-        target_measurement_kind = MeasurementKind(
-            measurement_kind=measurement_kind
-        )
-        session.add(target_measurement_kind)
-        print(measurement_kind)
-        raise
-
-    measurement_record = SensorMeasurement(
-        topic=[target_topic],
-        sensor=[sensor_id],
-        measurement_kind=[target_measurement_kind],
-        measurement_value=measurement_value,
-    )
-    session.add(measurement_record)
-    session.commit()
-    for entry in session.query(SensorMeasurement):
-        try:
-            print(entry)
-        except Exception:
-            # TODO: add logging
-            continue
-
-
-with resources.path("db.data", "sensor_data.db") as sqlite_filepath:
-    engine = create_engine(f"sqlite:///{sqlite_filepath}")
-
-Base.metadata.create_all(engine)
-Session = sessionmaker(bind=engine)
-session = Session()
-session.commit()
