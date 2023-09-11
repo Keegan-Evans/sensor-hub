@@ -1,4 +1,4 @@
-from db.models import (
+from db.sensor_data_models import (
     add_measurement_record,
 )
 
