@@ -26,6 +26,10 @@
       ansible.builtin.pip:
         name: git+https://github.com/4cscc/mqtt-data-logger.git@main
 
+    - name: intialize db
+      ansible.builtin.command:
+        cmd: python /usr/local/lib/python3.9/dist-packages/mqtt_data_logger/sensor_data_models.py
+
     - name: reload systemd daemon
       ansible.builtin.systemd:
         daemon_reload: yes
