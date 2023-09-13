@@ -12,7 +12,7 @@
         src: ../setup_files/mqtt_logger.service
         dest: /lib/systemd/system/mqtt_logger.service
         force: yes
-        mode: 0644
+        mode: 0664
 
     # read AND write permissions for all users needed
     - name: make sure db file exists
@@ -25,6 +25,10 @@
     - name: install mqtt-db-logger
       ansible.builtin.pip:
         name: git+https://github.com/4cscc/mqtt-data-logger.git@main
+
+    - name: reload systemd daemon
+      ansible.builtin.systemd:
+        daemon_reload: yes
 
     - name: start mqtt_logger
       ansible.builtin.systemd:
