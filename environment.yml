@@ -8,3 +8,5 @@ dependencies:
   - sqlalchemy
   - pandas
   - flask
+  - treelib
+  - IPython

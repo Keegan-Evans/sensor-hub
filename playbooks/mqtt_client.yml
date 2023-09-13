@@ -7,24 +7,12 @@
         name: sqlite3
         state: present
 
-    - name: install python mqtt client and sqlite3
-      ansible.builtin.pip:
-       name: paho-mqtt
-
-    - name: copy python script for mqtt_logger_service
-      tags: logger
-      ansible.builtin.copy:
-        src: ../setup_files/run_mqtt_logger.py
-        dest: /etc/run_mqtt_logger.py
-        force: yes
-        mode: 0755
-
     - name: copy mqtt_logger systemd service setup file
       ansible.builtin.copy:
         src: ../setup_files/mqtt_logger.service
         dest: /lib/systemd/system/mqtt_logger.service
         force: yes
-        mode: 0644
+        mode: 0664
 
     # read AND write permissions for all users needed
     - name: make sure db file exists
@@ -34,13 +22,17 @@
         mode: 0666
         owner: root
 
-    - name: copy db setup files
-      ansible.builtin.copy:
-        src: ../setup_files/setup_database.py
-        dest: /home/beta/setup_database.py
+    - name: install mqtt-db-logger
+      ansible.builtin.pip:
+        name: git+https://github.com/4cscc/mqtt-data-logger.git@main
 
-    - name: install database
-      command: python /home/beta/setup_database.py
+    - name: intialize db
+      ansible.builtin.command:
+        cmd: python /usr/local/lib/python3.9/dist-packages/mqtt_data_logger/sensor_data_models.py
+
+    - name: reload systemd daemon
+      ansible.builtin.systemd:
+        daemon_reload: yes
 
     - name: start mqtt_logger
       ansible.builtin.systemd:
