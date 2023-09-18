@@ -22,11 +22,6 @@
         state: restarted
         enabled: yes
 
-    - name: install sqlite3
-      ansible.builtin.apt:
-        name: sqlite3
-        state: present
-
     - name: reload systemd
       ansible.builtin.systemd:
         daemon_reload: true
