@@ -3,7 +3,7 @@
   tasks:
     - name: install sensor-dashboard
       ansible.builtin.pip:
-        name: git+https://github.com/Keegan-Evans/sensor-hub.git@main
+        name: git+https://github.com/4cscc/sensor-hub.git@main
 
     - name: copy viz_dashboard systemd service setup file
       ansible.builtin.copy:
