@@ -28,7 +28,7 @@
 
     - name: intialize db
       ansible.builtin.command:
-        cmd: python /usr/local/lib/python3.9/dist-packages/mqtt_data_logger/sensor_data_models.py
+        cmd: initialize_database /home/beta/sensor_data.db
 
     - name: reload systemd daemon
       ansible.builtin.systemd:
