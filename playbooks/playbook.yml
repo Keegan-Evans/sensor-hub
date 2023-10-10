@@ -2,5 +2,6 @@
 - import_playbook: initial.yml
 - import_playbook: network.yml
 - import_playbook: mqtt_broker.yml
+- import_playbook: sensor_dashboard.yml
 - import_playbook: mqtt_client.yml
 - import_playbook: finish_up.yml

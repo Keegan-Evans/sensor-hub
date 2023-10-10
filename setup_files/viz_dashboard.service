@@ -1,0 +1,17 @@
+[Unit]
+Description=Runs a visualization dashboard for the collected sensor data.
+After=multi-user.target hostapd.service mqtt.service
+
+[Service]
+Type=simple
+Restart=always
+# RAW FILE PATH
+# ExecStart=/usr/bin/python /usr/local/lib/python3.9/dist-packages/sensor_dashboard/main.py
+# WITH console_script invocation
+ExecStart=run_sensor_dashboard
+
+
+# TODO: replace above with python path.
+[Install]
+WantedBy=multi-user.target
+

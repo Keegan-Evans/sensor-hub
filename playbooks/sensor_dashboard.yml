@@ -1,0 +1,17 @@
+- name: setup sensor-dashboard and establish service
+  hosts: all
+  tasks:
+    - name: install sensor-dashboard
+      ansible.builtin.pip:
+        name: git+https://github.com/Keegan-Evans/sensor-hub.git@main
+
+    - name: copy viz_dashboard systemd service setup file
+      ansible.builtin.copy:
+        src: ../setup_files/viz_dashboard.service
+        dest: /lib/systemd/system/viz_dashboard.service
+        force: yes
+        mode: 0664
+
+    - name: reload systemd daemon
+      ansible.builtin.systemd:
+        daemon_reload: yes
