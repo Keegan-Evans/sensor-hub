@@ -5,7 +5,7 @@ After=multi-user.target hostapd.service
 [Service]
 Type=simple
 Restart=always
-ExecStart=/usr/bin/python /usr/local/lib/python3.9/dist-packages/mqtt_data_logger/__main__.py
+ExecStart=/home/beta/mqtt_data_logger/venv/bin/run_mqtt_logger
 
 [Install]
 WantedBy=multi-user.target
