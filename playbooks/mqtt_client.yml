@@ -34,13 +34,12 @@
       ansible.builtin.command:
         cmd: /home/beta/sensor-hub/bin/initialize_database /home/beta/sensor_data.db
 
-    - name: reload systemd daemon
-      ansible.builtin.systemd:
-        daemon_reload: yes
-
     - name: start mqtt_logger
       ansible.builtin.systemd:
         name: mqtt_logger
         enabled: true
         masked: false
-        state: restarted
+
+    - name: reload systemd daemon
+      ansible.builtin.systemd:
+        daemon_reload: yes

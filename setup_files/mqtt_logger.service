@@ -1,6 +1,6 @@
 [Unit]
 Description=Logs sensor data received via mqtt to database.
-After=multi-user.target hostapd.service
+After=multi-user.target
 
 [Service]
 Type=simple

@@ -1,6 +1,6 @@
 [Unit]
 Description=Runs a visualization dashboard for the collected sensor data.
-After=multi-user.target hostapd.service mqtt.service
+After=multi-user.target  mqtt.service
 
 [Service]
 Type=forking
