@@ -2,6 +2,11 @@
   hosts: all
   tasks:
 
+  - name: install net tools
+    apt:
+      name: net-tools
+      state: present
+
   # install hostapd
   - name: install hostapd
     apt:
@@ -36,20 +41,6 @@
 
   ### setup the network router
 
-  # remove old dhcpcd.conf
-  - name: remove old dhcpcd.conf
-    file:
-      path: /etc/dhcpcd.conf
-      state: absent
-
-  # copy new dhcpcd.conf
-  - name: copy new dhcpcd.conf
-    copy:
-      src: ../setup_files/dhcpcd.conf
-      dest: /etc/dhcpcd.conf
-      owner: root
-      group: root
-      mode: 0644
 
   # remove old dnsmasq.conf
   - name: remove old dnsmasq.conf
@@ -90,8 +81,8 @@
       masked: no
 
   # ensure wifi is not blocked
-  - name: ensure wifi is not blocked
-    shell: rfkill unblock wlan 
+  # - name: ensure wifi is not blocked
+    # shell: rfkill unblock wlan 
 
   # upload hostapd.conf
   - name: upload hostapd.conf
