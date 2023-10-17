@@ -22,23 +22,24 @@
         mode: 0666
         owner: root
 
-    - name: install mqtt-db-logger
-      ansible.builtin.pip:
-        name: git+https://github.com/4cscc/mqtt-data-logger.git@main
-        virtualenv: /home/beta/mqtt_data_logger/venv
-        virtualenv_command: python3 -m venv
+    # - name: install mqtt-db-logger
+      # ansible.builtin.pip:
+        # name: git+https://github.com/4cscc/mqtt-data-logger.git@main
+        # state: present
+        # virtualenv: /home/beta/sensor-hub/
+        # virtualenv_command: virtualenv
+
 
     - name: intialize db
       ansible.builtin.command:
-        cmd: initialize_database /home/beta/sensor_data.db
-
-    - name: reload systemd daemon
-      ansible.builtin.systemd:
-        daemon_reload: yes
+        cmd: /home/beta/sensor-hub/bin/initialize_database /home/beta/sensor_data.db
 
     - name: start mqtt_logger
       ansible.builtin.systemd:
         name: mqtt_logger
         enabled: true
         masked: false
-        state: restarted
+
+    - name: reload systemd daemon
+      ansible.builtin.systemd:
+        daemon_reload: yes

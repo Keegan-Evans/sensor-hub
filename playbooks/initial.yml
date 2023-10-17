@@ -1,11 +1,20 @@
 - name: initial updates
   hosts: all
   tasks:
+
     - name: update pi before starting
       ansible.builtin.apt:
         update_cache: yes
         cache_valid_time: 3600
 
+    # present to assure dpgk lock for ugrade removed
+    - name: Purge unattended upgrades
+      raw: apt-get -y purge unattended-upgrades
+
     - name: perform upgrades
-      ansible.builtin.apt:
+      apt:
+        update_cache: true
+        update_cache_retries: 10
+        update_cache_retry_max_delay: 20
         upgrade: dist
+        autoremove: yes

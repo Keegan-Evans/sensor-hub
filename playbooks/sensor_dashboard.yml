@@ -4,15 +4,64 @@
 
   - name: create directory
     file:
-      path: /home/beta/sensor-dashboard
+      path: /home/beta/sensor-hub
       state: directory
+
+  # - name: create virtualenv
+    # shell: \
+      # python3 -m virtualenv /home/beta/sensor-hub/
+
+  - name: python_stuff
+    apt:
+      name: 
+        - python3-full
+        - python3-dev
+        - python3-pip
+        - python3-pandas
+        - python3-setuptools
+        - python3-virtualenv
+      state: latest
   
-  - name: install sensor-dashboard
+
+
+
+  # - name: create environment
+    # pip:
+      # name:
+      # - pip
+      # - Cython
+      # - wheel
+      # - setuptools
+      # - pandas
+      # state: latest
+
+  - name: install sensor-dashboard in virtualenv
     pip:
       name: git+https://github.com/4cscc/sensor-dashboard.git@main
-      state: forcereinstall
-      virtualenv: /home/beta/sensor-dashboard/venv
-      virtualenv_command: python3 -m venv
+      state: present
+      virtualenv: /home/beta/sensor-hub/
+      virtualenv_command: virtualenv
+      virtualenv_site_packages: true
+      virtualenv_python: python3
+
+  # - name: install numpy
+    # shell: source /home/beta/sensor-hub/bin/activate && pip install numpy && pip install pandas
+# 
+  # - name: install pandas
+    # pip:
+      # name: pandas
+      # state: latest
+      # virtualenv: /home/beta/sensor-hub/
+      # virtualenv_command: virtualenv
+      # virtualenv_site_packages: true
+# 
+  # - name: install-sensor-dashboard
+    # pip:
+      # name: git+https://github.com/4cscc/sensor-dashboard.git@main
+      # state: present
+      # virtualenv: /home/beta/sensor-hub/
+      # virtualenv_command: virtualenv
+      # virtualenv_site_packages: true
 
   - name: copy viz_dashboard systemd service setup file
     ansible.builtin.copy:
@@ -20,6 +69,13 @@
       dest: /lib/systemd/system/viz_dashboard.service
       force: yes
       mode: 0664
+
+  - name: start viz_dashboard service
+    ansible.builtin.systemd:
+      name: viz_dashboard
+      enabled: true
+      masked: false
+
 
   - name: reload systemd daemon
     ansible.builtin.systemd:

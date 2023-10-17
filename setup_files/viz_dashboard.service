@@ -1,14 +1,11 @@
 [Unit]
 Description=Runs a visualization dashboard for the collected sensor data.
-After=multi-user.target hostapd.service mqtt.service
+After=multi-user.target  mqtt.service
 
 [Service]
-Type=simple
+Type=forking
 Restart=always
-# RAW FILE PATH
-# ExecStart=/usr/bin/python /usr/local/lib/python3.9/dist-packages/sensor_dashboard/main.py
-# WITH console_script invocation
-ExecStart=/home/beta/sensor-dashboard/venv/bin/run_sensor_dashboard
+ExecStart=/home/beta/sensor-hub/bin/run_sensor_dashboard
 
 
 # TODO: replace above with python path.

@@ -1,11 +1,11 @@
 [Unit]
 Description=Logs sensor data received via mqtt to database.
-After=multi-user.target hostapd.service
+After=multi-user.target
 
 [Service]
 Type=simple
 Restart=always
-ExecStart=/home/beta/mqtt_data_logger/venv/bin/run_mqtt_logger
+ExecStart=/home/beta/sensor-hub/bin/run_mqtt_logger
 
 [Install]
 WantedBy=multi-user.target
