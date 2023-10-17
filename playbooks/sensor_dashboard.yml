@@ -7,20 +7,38 @@
       path: /home/beta/sensor-hub
       state: directory
 
-  - name: create virtualenv
-    shell: \
-      python3 -m virtualenv /home/beta/sensor-hub/
+  # - name: create virtualenv
+    # shell: \
+      # python3 -m virtualenv /home/beta/sensor-hub/
 
-
-
-  - name: create environment
-    pip:
-      name:
-      - pip
-      - Cython
-      - wheel
-      - setuptools
+  - name: python_stuff
+    apt:
+      name: 
+        - python3-full
+        - python3-dev
+        - python3-pip
+        - python3-pandas
+        - python3-setuptools
+        - python3-virtualenv
       state: latest
+  
+
+
+
+  # - name: create environment
+    # pip:
+      # name:
+      # - pip
+      # - Cython
+      # - wheel
+      # - setuptools
+      # - pandas
+      # state: latest
+
+  - name: install sensor-dashboard in virtualenv
+    pip:
+      name: git+https://github.com/4cscc/sensor-dashboard.git@main
+      state: present
       virtualenv: /home/beta/sensor-hub/
       virtualenv_command: virtualenv
       virtualenv_site_packages: true
@@ -36,17 +54,14 @@
       # virtualenv: /home/beta/sensor-hub/
       # virtualenv_command: virtualenv
       # virtualenv_site_packages: true
-
-  - name: install-sensor-dashboard
-    pip:
-      name: git+https://github.com/4cscc/sensor-dashboard.git@main
-      state: latest
-      virtualenv: /home/beta/sensor-hub/
-      virtualenv_command: virtualenv
-      virtualenv_site_packages: true
 # 
-  - name: install sensor-dashboard
-    shell: /home/beta/sensor-hub/bin/pip install git+https://github.com/4cscc/sensor-dashboard.git@main
+  # - name: install-sensor-dashboard
+    # pip:
+      # name: git+https://github.com/4cscc/sensor-dashboard.git@main
+      # state: present
+      # virtualenv: /home/beta/sensor-hub/
+      # virtualenv_command: virtualenv
+      # virtualenv_site_packages: true
 
   - name: copy viz_dashboard systemd service setup file
     ansible.builtin.copy:
@@ -54,6 +69,13 @@
       dest: /lib/systemd/system/viz_dashboard.service
       force: yes
       mode: 0664
+
+  - name: start viz_dashboard service
+    ansible.builtin.systemd:
+      name: viz_dashboard
+      enabled: true
+      masked: false
+
 
   - name: reload systemd daemon
     ansible.builtin.systemd:
