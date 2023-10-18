@@ -1,0 +1,10 @@
+[Unit]
+Description=Starts hosted access point for Pico's to connect to.
+
+[Service]
+type=simple
+Restart=always
+ExecStart= sudo nmcli con up Hotspot
+
+[Install]
+WantedBy=multi-user.target

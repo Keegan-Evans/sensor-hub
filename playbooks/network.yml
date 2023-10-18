@@ -1,6 +1,27 @@
 - name: access point and network setup
   hosts: all
   tasks:
-    - name: setup hosted network
-      shell:
-        sudo nmcli device wifi hotspot ssid sensor_hub password FourCorners
+
+  - name: initialize hosted network
+    shell:
+      sudo nmcli device wifi hotspot ifname wlan0 ssid sensor-hub password FourCorners &&
+      sudo nmcli con up Hotspot
+
+  - name: specify addresses
+    shell:
+      sudo nmcli connection modify Hotspot ipv4.addresses 10.42.0.1/24
+
+  - name: add service to start hotspot
+    copy:
+      src: ../setup_files/access_point.service
+      dest: /etc/systemd/system/access_point.service
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: enable service
+    shell: sudo systemctl enable access_point.service && sudo systemctl start access_point.service
+
+  - name: Reboot using systemctl
+    ansible.builtin.reboot:
+      reboot_command: systemctl reboot
