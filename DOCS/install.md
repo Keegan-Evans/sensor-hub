@@ -43,5 +43,24 @@
 
 - Everything else here should be ok with the defaults, scroll to the bottom
   and click `SAVE`, when the `Advanced Options` dialog closes, you may then
-  click the the 
+  click the `WRITE` button.
 
+- When the image finishes writing to the MicroSD card and has been verified, remove the card from the reader and place it in the slot on the Raspberry Pi, then plug the Pi into an Ethernet cable connected to a network; finally plug in the power to the Pi.
+
+### Install Sensor-Hub Software
+
+- To install the actual Sensor-Hub software, you will need to have [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/index.html) installed on your host computer.
+
+- Use your terminal to confirm you have SSH access to the Pi, `ssh beta@<Pi-ip-address>`. Your host machine must be connected to the same network the Pi is plugged into. If this fails but you can still ping the pi, you should carefully check the settings used when writing the image, especially those regarding SSH and the key.
+
+- Type exit when you have established a connection, to return to the terminal on your host machine.
+
+- Change into the directory containing the clone from GitHub, and edit the `pis.ini` file, so that `ansible_host=<Pi-ip-address>`. If you have used a different user or password, you should change this file to reflect those changes as well.
+
+- Run the setup by entering: `ansible-playbook -i pis.ini ./playbooks/playbook.yml`
+
+- You may need to manually power cycle the Pi to ensure the `sensor-hub` network starts up appropriately.
+
+### Viewing data
+
+- Currently the, there is a visualization dashboard hosted by Sensor-Hub, that let's you view visualiztion of dashboard data by accessing the server at: `<Pi-ip-address>:8050`
