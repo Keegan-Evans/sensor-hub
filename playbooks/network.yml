@@ -2,45 +2,18 @@
   hosts: all
   tasks:
 
-  - name: Initialize hosted network.
-    nmcli:
-      name: Hotspot
-      type: wifi
-      con-name: Hotspot
-      ifname: wlan0
-      autoconnect: yes
-      ssid: sensor_hub
-      password: FourCorners
-      mode: ap
-      state: present
-
-    # shell:
-      # sudo nmcli device wifi hotspot ifname wlan0 ssid sensor_hub password FourCorners &&
-      # sudo nmcli con up Hotspot
-
-
-  # default address is 10.42.0.1/24, but setting explicitly here for clarity
-  - name: Specify addresses.
-    nmcli:
-      con-name: Hotspot
-      ipv4.addresses:
-        - 10.42.0.1/24
-
-    # shell:
-      # sudo nmcli connection modify Hotspot ipv4.addresses 10.42.0.1/24
-
-  # - name: add service to start hotspot
-    # copy:
-      # src: ../setup_files/access_point.service
-      # dest: /etc/systemd/system/access_point.service
-      # owner: root
-      # group: root
-      # mode: 0644
-
-  # - name: enable service
-    # 
-    # shell: sudo systemctl enable access_point.service && sudo systemctl start access_point.service
-
-  # - name: Reboot using systemctl
-    # ansible.builtin.reboot:
-      # reboot_command: systemctl reboot
+    - name: Initialize hosted network.
+      community.general.nmcli:
+        type: wifi
+        conn_name: Hotspot
+        ifname: wlan0
+        autoconnect: true
+        wifi_sec:
+          key-mgmt: wpa-psk
+          psk: FourCorners
+        ssid: sensor_hub
+        wifi:
+          mode: ap
+        state: present
+        ip4:
+          - 10.42.0.1/24
