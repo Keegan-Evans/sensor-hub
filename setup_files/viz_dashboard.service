@@ -7,8 +7,6 @@ Type=forking
 Restart=always
 ExecStart=/home/beta/sensor-hub/bin/run_sensor_dashboard
 
-
-# TODO: replace above with python path.
 [Install]
 WantedBy=multi-user.target
 
