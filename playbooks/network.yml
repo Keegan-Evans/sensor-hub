@@ -4,11 +4,9 @@
 
   - name: initialize hosted network
     shell:
-      sudo nmcli device wifi hotspot ifname wlan0 ssid sensor_hub password FourCorners &&
-      sudo nmcli con up Hotspot
+      sudo nmcli device wifi hotspot ifname wlan0 ssid sensor_hub password FourCorners
 
   # default address is 10.42.0.1/24, but setting explicitly here for clarity
   - name: specify addresses
     shell:
       sudo nmcli connection modify Hotspot ipv4.addresses 10.42.0.1/24
-# 
