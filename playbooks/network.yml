@@ -6,6 +6,7 @@
     shell:
       sudo nmcli con add type wifi ifname wlan0 con-name SensorHub autoconnect yes ssid sensor_hub &&
       sudo nmcli con modify SensorHub 802-11-wireless.mode ap 802-11-wireless.band bg ipv4.method shared &&
+      sudo nmcli con modify SensorHub connection.autoconnect true &&
       sudo nmcli con modify SensorHub wifi-sec.key-mgmt wpa-psk &&
       sudo nmcli con modify SensorHub wifi-sec.psk FourCorners &&
       sudo nmcli con modify SensorHub ipv4.addresses 10.42.0.1/24 &&
