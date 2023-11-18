@@ -3,7 +3,7 @@ Description=Runs a visualization dashboard for the collected sensor data.
 After=multi-user.target  mqtt.service
 
 [Service]
-Type=forking
+Type=simple
 Restart=always
 ExecStart=/home/beta/sensor-hub/bin/run_sensor_dashboard
 
