@@ -18,3 +18,6 @@
         update_cache_retry_max_delay: 20
         upgrade: dist
         autoremove: yes
+
+    - name: set automatic time
+      shell: timedatectl set-ntp true
