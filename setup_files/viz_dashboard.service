@@ -1,11 +1,11 @@
 [Unit]
 Description=Runs a visualization dashboard for the collected sensor data.
-After=multi-user.target  mqtt.service
+After=network.target  mqtt.service
 
 [Service]
-Type=forking
-Restart=always
 ExecStart=/home/beta/sensor-hub/bin/run_sensor_dashboard
+WorkingDirectory=/home/beta/sensor-hub/lib/python3.11/site-packages/sensor_dashboard
+Restart=always
 
 [Install]
 WantedBy=multi-user.target
