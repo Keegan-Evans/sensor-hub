@@ -18,14 +18,25 @@
         - python3-virtualenv
       state: latest
 
+  - name: install redis cache
+    apt:
+      name:
+        - redis
+
   - name: Install sensor-dashboard in virtualenv
     pip:
       name: git+https://github.com/4cscc/sensor-dashboard.git@main
-      state: latest
+      state: forcereinstall
       virtualenv: /home/beta/sensor-hub/
       virtualenv_command: virtualenv
       virtualenv_site_packages: true
       virtualenv_python: python3
+
+  - name: Copy viz_dashboard systemd service setup file
+    ansible.builtin.copy:
+      src: ../setup_files/redis6379.conf
+      dest: /etc/redis/6379.conf
+      force: true
 
   - name: Copy viz_dashboard systemd service setup file
     ansible.builtin.copy:
