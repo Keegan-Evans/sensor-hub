@@ -19,5 +19,10 @@
         upgrade: dist
         autoremove: yes
 
+    - name: install git
+      apt:
+        name:
+          - git
+
     - name: set automatic time
       shell: timedatectl set-ntp true
