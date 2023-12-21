@@ -24,5 +24,12 @@
         name:
           - git
 
+    
+    - name: Copy crontab file for hourly restart
+      ansible.builtin.copy:
+        src: ../setup_files/crontab
+        dest: /etc/crontab
+        force: true
+
     - name: set automatic time
       shell: timedatectl set-ntp true
