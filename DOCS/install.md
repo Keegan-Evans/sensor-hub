@@ -39,7 +39,7 @@
   else here, just be sure to update the `pis.ini` file before running the
   playbook.
 
-  !["demo image of PiImager config"](./docs/images/imager_options_config.png)
+  !["demo image of PiImager config"](./images/imager_options_config.png)
 
 - Everything else here should be ok with the defaults, scroll to the bottom
   and click `SAVE`, when the `Advanced Options` dialog closes, you may then
